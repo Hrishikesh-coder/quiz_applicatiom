@@ -20,13 +20,25 @@ def create_table():
     db.commit()
 
     sql = f'''
-                    CREATE TABLE users (
+                    CREATE TABLE  teachers (
                         ID INTEGER PRIMARY KEY AUTOINCREMENT,
                         name          VARCHAR(256) NOT NULL,
-                        teacher_or_student     VARCHAR(256) NOT NULL,
+                        
                         password              VARCHAR(256) NOT NULL
                         
                     );'''
+
+    cursor.execute(sql)
+    db.commit()
+
+    sql = f'''
+                        CREATE TABLE  students (
+                            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                            name          VARCHAR(256) NOT NULL,
+
+                            password              VARCHAR(256) NOT NULL
+
+                        );'''
 
     cursor.execute(sql)
     db.commit()
@@ -89,8 +101,56 @@ def teacher_home():
 
     input_given = input()
 
-    if 'y' in input_given or
+    if 'y' in input_given or 'Y' in input_given:
 
-teacher_home()
+        set_questions()
+
+    else:
+
+        print("OK !! THANK YOU FOR VISITING US !! BYE !!")
+
+
+def set_questions():
+
+    print("DO YOU HAVE AN ACCOUNT ?")
+
+    answer = input()
+
+    if 'Y' in answer or 'y' in answer:
+            pass
+
+    else:
+        print("CREATE ONE RIGHT NOW !! WE ARE REDIRECTING YOU TO THE NEW ACCOUNT CREATION OPTION")
+
+        create_new_account_for_teacher()
+
+def create_new_account_for_teacher():
+
+    print("DO YOU WANT TO CREATE A NEW ACCOUNT TEACHER ?")
+
+    answer = input()
+
+    if 'Y' in answer or 'y' in answer:
+
+        print("Lets get started !!")
+
+        new_teacher = []
+
+        name = input("Enter your name")
+        password = input("Enter your password")
+
+        new_teacher.append(name)
+        new_teacher.append(password)
+
+        create_new_account(new_teacher, 'teacher')
+
+    else:
+
+        print("OK !! BYE !!")
+
+def create_new_account():
+    pass
+
+#create_table()
 
 
