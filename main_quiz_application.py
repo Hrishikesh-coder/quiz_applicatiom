@@ -86,11 +86,11 @@ def teacher_home():
     if str(current_time[0:2]) < "12":
         print("Good Morning Teacher!")
 
-    elif str(current_time[0:2]) >= "12" and str(current_time) <= "4":
+    elif str(current_time[0:2]) >= "12" and str(current_time) <= "16":
 
         print("Good Afternoon !!")
 
-    elif str(current_time[0:2]) > "4" and str(current_time[0:2]) <= "8":
+    elif str(current_time[0:2]) > "16" and str(current_time[0:2]) <= "20":
 
         print("Good Evening !!")
 
@@ -148,9 +148,20 @@ def create_new_account_for_teacher():
 
         print("OK !! BYE !!")
 
-def create_new_account():
-    pass
+def create_new_account(account_details , account_type):
+
+    if account_type == 'teacher':
+        sql = f"INSERT INTO teachers(name, password) VALUES('{account_details[0]}', '{account_details[1]}' )"
+
+        cursor.execute(sql)
+        db.commit()
+
+    else:
+        sql = f"INSERT INTO students (name, password) VALUES('{account_details[1]}', '{account_details[2]}' )"
+
+        cursor.execute(sql)
+        db.commit()
 
 #create_table()
 
-
+teacher_home()
