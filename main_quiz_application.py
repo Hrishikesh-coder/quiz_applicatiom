@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 db = sqlite3.connect(f'quiz_db.db')
 
@@ -65,4 +66,31 @@ def student_home():
 
 def teacher_home():
 
-    print("")
+
+    now = datetime.now()
+
+    current_time = now.strftime("%H:%M:%S")
+
+    if str(current_time[0:2]) < "12":
+        print("Good Morning Teacher!")
+
+    elif str(current_time[0:2]) >= "12" and str(current_time) <= "4":
+
+        print("Good Afternoon !!")
+
+    elif str(current_time[0:2]) > "4" and str(current_time[0:2]) <= "8":
+
+        print("Good Evening !!")
+
+    else:
+        print("Good Night !!")
+
+    print("Do you want to set the quiz ?")
+
+    input_given = input()
+
+    if 'y' in input_given or
+
+teacher_home()
+
+
