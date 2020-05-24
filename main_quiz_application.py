@@ -20,6 +20,30 @@ def create_table():
     db.commit()
 
     sql = f'''
+                        CREATE TABLE questions (
+                            ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                            question          VARCHAR(256) NOT NULL,
+
+                            correct_answer              VARCHAR(256),
+                            marks_for_answer     VARCHAR(256)
+                        );'''
+
+    cursor.execute(sql)
+    db.commit()
+
+    sql = f'''
+                    CREATE TABLE questions (
+                        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                        question          VARCHAR(256) NOT NULL,
+                          
+                        correct_answer              VARCHAR(256),
+                        marks_for_answer     VARCHAR(256)
+                    );'''
+
+    cursor.execute(sql)
+    db.commit()
+
+    sql = f'''
                     CREATE TABLE  teachers (
                         ID INTEGER PRIMARY KEY AUTOINCREMENT,
                         name          VARCHAR(256) NOT NULL,
@@ -48,7 +72,7 @@ def teacher_or_student():
     print("ARE YOU ARE A STUDENT OR A TEACHER ?")
     entry = input()
 
-    if 't' in entry or 'T' in entry:
+    if 'teacher' in entry or 'Teacher' in entry:
 
         teacher_home()
 
@@ -68,8 +92,9 @@ def student_home():
 
         choice = input()
 
-        if 'Y' in choice or 'y' in choice:
-            pass
+        if 'Yes' in choice or 'yes' in choice:
+
+            create_new_account_for_student()
         else:
             pass
 
@@ -95,7 +120,7 @@ def teacher_home():
         print("Good Evening !!")
 
     else:
-        print("Good Night !!")
+        print("Good Evening !!")
 
     print("Do you want to set the quiz ?")
 
@@ -109,6 +134,9 @@ def teacher_home():
 
         print("OK !! THANK YOU FOR VISITING US !! BYE !!")
 
+def create_new_account_for_student():
+
+    pass
 
 def set_questions():
 
@@ -117,7 +145,26 @@ def set_questions():
     answer = input()
 
     if 'Y' in answer or 'y' in answer:
-            pass
+
+        print("OK !! LET'S START CREATING THE QUESTIONS !!")
+
+        print("HERE, YOU HAVE TO GIVE THE QUESTION , CORRECT ANSWER, AND THE MARKS FOR THE CORRECT ANSWER .")
+        print("START ENTERING !!")
+
+        entries = []
+
+        question = input("Enter the question !")
+        correct_answer = input("Enter the correct answer !")
+        marks = int(input("Enter the marks for a correct answer"))
+
+        entries.append(question)
+        entries.append(correct_answer)
+        entries.append(marks)
+
+        sql = f"INSERT INTO questions(question, correct_answer, marks_for_answer) VALUES('{entries[0]}', '{entries[1]}', '{entries[2]}' )"
+
+        cursor.execute(sql)
+        db.commit()
 
     else:
         print("CREATE ONE RIGHT NOW !! WE ARE REDIRECTING YOU TO THE NEW ACCOUNT CREATION OPTION")
@@ -131,6 +178,10 @@ def create_new_account_for_teacher():
     answer = input()
 
     if 'Y' in answer or 'y' in answer:
+
+        print("PLEASE LOGIN FIRST !!")
+
+        login()
 
         print("Lets get started !!")
 
@@ -162,6 +213,9 @@ def create_new_account(account_details , account_type):
         cursor.execute(sql)
         db.commit()
 
-#create_table()
+
+def login():
+
 
 teacher_home()
+
