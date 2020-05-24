@@ -123,8 +123,8 @@ def student_home():
         choice = input()
 
         if 'Yes' in choice or 'yes' in choice:
+            answer_questions()
 
-            create_new_account_for_student()
         else:
             create_new_account_for_student()
 
@@ -198,7 +198,7 @@ def set_questions():
 
         print("PLEASE LOGIN FIRST !!")
 
-        val = login()
+        val = login('teacher')
 
         if val == True:
 
@@ -229,6 +229,60 @@ def set_questions():
         print("CREATE ONE RIGHT NOW !! WE ARE REDIRECTING YOU TO THE NEW ACCOUNT CREATION OPTION")
 
         create_new_account_for_teacher()
+
+def answer_questions():
+    print("DO YOU HAVE AN ACCOUNT ?")
+
+    answer = input()
+
+    if 'Y' in answer or 'y' in answer:
+
+        print("PLEASE LOGIN FIRST !!")
+
+        val = login('student')
+
+        if val == True:
+
+            print("OK !! LET'S START ANSWERING THE QUESTIONS !!")
+
+            print("HERE, YOU HAVE TO ANSWER ALL THE QUESTIONS , FULL MARKS WILL BE DISPLAYED AT THE END")
+
+            questions = get_questions()
+
+            obtained_marks = 0
+            total_marks = 0
+
+            for question in questions:
+                print("START ENTERING !!")
+
+                print(question[1])
+                print("The Marks for the correct Answer is : " + str(question[3]))
+                entries = []
+
+
+                answer_given = input("Enter the correct answer !")
+
+
+                sql = f"INSERT INTO quiz(question, answer_given , correct_answer, marks_for_answer) VALUES('{question[1]}', '{answer_given}' , '{question[2]}', '{question[3]}' )"
+
+                cursor.execute(sql)
+                db.commit()
+
+        else:
+
+            print("INCORRECT LOGIN CREDENTIALS GIVEN !!")
+    else:
+        print("CREATE ONE RIGHT NOW !! WE ARE REDIRECTING YOU TO THE NEW ACCOUNT CREATION OPTION")
+
+        create_new_account_for_teacher()
+
+def get_questions():
+    sql = f"SELECT * FROM questions"
+
+    cursor.execute(sql)
+    db.commit()
+
+    return cursor.fetchall()
 
 def create_new_account_for_teacher():
 
@@ -271,7 +325,7 @@ def create_new_account(account_details , account_type):
         db.commit()
 
 
-def login():
+def login(user_type):
 
     credentials = []
 
@@ -281,7 +335,7 @@ def login():
     credentials.append(name)
     credentials.append(password)
 
-    details = login_validation(credentials)
+    details = login_validation(credentials,user_type)
 
     if len(details) == 0:
 
@@ -302,13 +356,22 @@ def login():
 
 
 
-def login_validation(details):
+def login_validation(details, user_type):
 
-    sql = f"SELECT * FROM teachers WHERE name='{details[0]}'"
+    if user_type == 'Teacher' or user_type == 'teacher':
+        sql = f"SELECT * FROM teachers WHERE name='{details[0]}'"
 
-    cursor.execute(sql)
-    db.commit()
+        cursor.execute(sql)
+        db.commit()
+    elif user_type == 'Student' or user_type=='student':
 
+        sql = f"SELECT * FROM students WHERE name='{details[0]}'"
+
+        cursor.execute(sql)
+        db.commit()
+    else:
+
+        print("Incorrect User type given")
     return cursor.fetchall()
 
 
