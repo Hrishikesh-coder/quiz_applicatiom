@@ -5,6 +5,9 @@ db = sqlite3.connect(f'quiz_db.db')
 
 cursor = db.cursor()
 
+def home():
+
+
 def create_table():
 
     sql = f'''
@@ -135,8 +138,28 @@ def teacher_home():
         print("OK !! THANK YOU FOR VISITING US !! BYE !!")
 
 def create_new_account_for_student():
+    print("DO YOU WANT TO CREATE A NEW ACCOUNT ?")
 
-    pass
+    answer = input()
+
+    if 'Y' in answer or 'y' in answer:
+
+        print("Lets get started !!")
+
+        new_student = []
+
+        name = input("Enter your name")
+        password = input("Enter your password")
+
+        new_student.append(name)
+        new_student.append(password)
+
+        create_new_account(new_student, 'student')
+
+    else:
+
+        print("OK !! BYE !!")
+
 
 def set_questions():
 
@@ -146,26 +169,35 @@ def set_questions():
 
     if 'Y' in answer or 'y' in answer:
 
-        print("OK !! LET'S START CREATING THE QUESTIONS !!")
+        print("PLEASE LOGIN FIRST !!")
 
-        print("HERE, YOU HAVE TO GIVE THE QUESTION , CORRECT ANSWER, AND THE MARKS FOR THE CORRECT ANSWER .")
-        print("START ENTERING !!")
+        val = login()
 
-        entries = []
+        if val == True:
 
-        question = input("Enter the question !")
-        correct_answer = input("Enter the correct answer !")
-        marks = int(input("Enter the marks for a correct answer"))
+            print("OK !! LET'S START CREATING THE QUESTIONS !!")
 
-        entries.append(question)
-        entries.append(correct_answer)
-        entries.append(marks)
+            print("HERE, YOU HAVE TO GIVE THE QUESTION , CORRECT ANSWER, AND THE MARKS FOR THE CORRECT ANSWER .")
+            print("START ENTERING !!")
 
-        sql = f"INSERT INTO questions(question, correct_answer, marks_for_answer) VALUES('{entries[0]}', '{entries[1]}', '{entries[2]}' )"
+            entries = []
 
-        cursor.execute(sql)
-        db.commit()
+            question = input("Enter the question !")
+            correct_answer = input("Enter the correct answer !")
+            marks = int(input("Enter the marks for a correct answer"))
 
+            entries.append(question)
+            entries.append(correct_answer)
+            entries.append(marks)
+
+            sql = f"INSERT INTO questions(question, correct_answer, marks_for_answer) VALUES('{entries[0]}', '{entries[1]}', '{entries[2]}' )"
+
+            cursor.execute(sql)
+            db.commit()
+
+        else:
+
+            print("INCORRECT LOGIN CREDENTIALS GIVEN !!")
     else:
         print("CREATE ONE RIGHT NOW !! WE ARE REDIRECTING YOU TO THE NEW ACCOUNT CREATION OPTION")
 
@@ -179,9 +211,7 @@ def create_new_account_for_teacher():
 
     if 'Y' in answer or 'y' in answer:
 
-        print("PLEASE LOGIN FIRST !!")
 
-        login()
 
         print("Lets get started !!")
 
@@ -216,6 +246,42 @@ def create_new_account(account_details , account_type):
 
 def login():
 
+    credentials = []
 
-teacher_home()
+    name = input("Enter your username")
+    password = input("Enter your password")
+
+    credentials.append(name)
+    credentials.append(password)
+
+    details = login_validation(credentials)
+
+    if len(details) == 0:
+
+        print("No such account exists")
+
+    if len(details) == 0:
+
+       pass
+    else:
+        if details[0][2] == password:
+
+            return True
+
+        else:
+
+            return False
+
+
+
+
+def login_validation(details):
+
+    sql = f"SELECT * FROM teachers WHERE name='{details[0]}'"
+
+    cursor.execute(sql)
+    db.commit()
+
+    return cursor.fetchall()
+
 
