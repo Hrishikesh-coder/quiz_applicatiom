@@ -6,7 +6,34 @@ db = sqlite3.connect(f'quiz_db.db')
 cursor = db.cursor()
 
 def home():
+    now = datetime.now()
 
+    current_time = now.strftime("%H:%M:%S")
+
+    if str(current_time[0:2]) < "12":
+        print("Good Morning Teacher!")
+
+    elif str(current_time[0:2]) >= "12" and str(current_time) <= "16":
+
+        print("Good Afternoon !!")
+
+    elif str(current_time[0:2]) > "16" and str(current_time[0:2]) <= "20":
+
+        print("Good Evening !!")
+
+    else:
+        print("Good Evening !!")
+
+    print("ARE YOU A STUDENT OR A TEACHER ?")
+
+    answer = input()
+
+    if 'teacher' in answer or 'Teacher' in answer:
+
+        teacher_home()
+
+    else:
+        student_home()
 
 def create_table():
 
@@ -90,8 +117,8 @@ def student_home():
     answer = input()
 
     if 'Y' in answer or 'y' in answer:
-        print('''THAT'S GREAT
-        DO YOU HAVE AN ACCOUNT ?''')
+        print("THAT'S GREAT")
+        print("DO YOU HAVE AN ACCOUNT ?")
 
         choice = input()
 
@@ -99,10 +126,10 @@ def student_home():
 
             create_new_account_for_student()
         else:
-            pass
+            create_new_account_for_student()
 
     else:
-        pass
+        print("OK !! BYE !!")
 
 def teacher_home():
 
@@ -238,7 +265,7 @@ def create_new_account(account_details , account_type):
         db.commit()
 
     else:
-        sql = f"INSERT INTO students (name, password) VALUES('{account_details[1]}', '{account_details[2]}' )"
+        sql = f"INSERT INTO students (name, password) VALUES('{account_details[0]}', '{account_details[1]}' )"
 
         cursor.execute(sql)
         db.commit()
@@ -285,3 +312,4 @@ def login_validation(details):
     return cursor.fetchall()
 
 
+home()
