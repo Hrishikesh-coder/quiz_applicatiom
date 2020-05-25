@@ -50,6 +50,18 @@ def create_table():
     db.commit()
 
     sql = f'''
+                            CREATE TABLE  user_records (
+                                ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name          VARCHAR(256) NOT NULL,
+
+                                obtained_marks  INTEGER NOT NULL,
+                                total_marks  INTGER NOT NULL
+                            );'''
+
+    cursor.execute(sql)
+    db.commit()
+
+    sql = f'''
                         CREATE TABLE questions (
                             ID INTEGER PRIMARY KEY AUTOINCREMENT,
                             question          VARCHAR(256) NOT NULL,
@@ -243,7 +255,9 @@ def answer_questions():
 
         if val == True:
 
-            print("OK !! LET'S START ANSWERING THE QUESTIONS !!")
+            name = input("What is Your Name ?")
+
+            print(f"OK , {name} !!  LET'S START ANSWERING THE QUESTIONS !!")
 
             print("HERE, YOU HAVE TO ANSWER ALL THE QUESTIONS , FULL MARKS WILL BE DISPLAYED AT THE END")
 
@@ -263,10 +277,39 @@ def answer_questions():
                 answer_given = input("Enter the correct answer !")
 
 
+                if str(answer_given)  == str(question[2]):
+
+                    obtained_marks+= int(question[3])
+                else:
+
+                    obtained_marks+=0
+
+                total_marks += int(question[3])
+
                 sql = f"INSERT INTO quiz(question, answer_given , correct_answer, marks_for_answer) VALUES('{question[1]}', '{answer_given}' , '{question[2]}', '{question[3]}' )"
 
                 cursor.execute(sql)
                 db.commit()
+
+
+
+            print("Do you want to view your results ?")
+
+            choice = input()
+
+            if 'yes' in choice or 'Yes' in choice:
+
+                print("Your obtained marks : " + str(obtained_marks))
+                print("The total marks : " + str(total_marks))
+
+            else:
+
+                print("OK !! BYE !!")
+
+            sql = f"INSERT INTO user_records(name, obtained_marks, total_marks) VALUES('{name}', '{obtained_marks}' , '{total_marks} ')"
+
+            cursor.execute(sql)
+            db.commit()
 
         else:
 
@@ -376,3 +419,4 @@ def login_validation(details, user_type):
 
 
 home()
+
